@@ -5,27 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    // 다이어리 리스트
-    ArrayList<Hospital> arrayList;
+    private ArrayList<Hospital> hospitals;
     private HospitalListAdapter diaryAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -35,20 +21,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        hospitals = new ArrayList<>();
         GetXml task = new GetXml(this);
-        task.start();
-
+        task.execute("https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire?serviceKey=iXusHy2%2FZz7qRhjkwpWBlGWiJaRpGZgroGBlBBow45q4oibueEQnnwMUkAUsOVG3PSlRqQKOYf2SGRxHRJAqoQ%3D%3D&QD=D002&Q0=대구광역시&Q1=북구");
+        Log.i("sizeofArr2",String.valueOf(hospitals.size()));
         // 다이어리 리스트
         recyclerView = (RecyclerView)findViewById(R.id.rv_List);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        arrayList = new ArrayList<>();
 
-        MyNotifyDataSetChanged();
+        diaryAdapter = new HospitalListAdapter(hospitals);
+        recyclerView.setAdapter(diaryAdapter);
+
+        diaryAdapter.notifyDataSetChanged();
+
+
     }
 
 
-    public void MyNotifyDataSetChanged(){
+    public void getHosData(ArrayList<Hospital> arrayList)
+    {
+        Log.i("sizeofArr",String.valueOf(arrayList.size()));
+        for(Hospital h : arrayList){
+            hospitals.add(new Hospital(h.getDutyName(),h.getDutyTime1c(),h.getDutyAddr()));
+        }
+        diaryAdapter.notifyDataSetChanged();
+    }
+
+    public void MyNotifyDataSetChanged(ArrayList<Hospital> arrayList){
 
         diaryAdapter = new HospitalListAdapter(arrayList);
         recyclerView.setAdapter(diaryAdapter);

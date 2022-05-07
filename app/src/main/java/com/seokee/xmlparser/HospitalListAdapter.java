@@ -22,7 +22,7 @@ public class HospitalListAdapter extends RecyclerView.Adapter<HospitalListAdapte
     @org.jetbrains.annotations.NotNull
     @Override
     public HospitalListAdapter.CustomViewHolder onCreateViewHolder(@NonNull @org.jetbrains.annotations.NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_hospital_item,parent,false);
         CustomViewHolder holder = new CustomViewHolder(view);
         return holder;
     }
